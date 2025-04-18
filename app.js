@@ -20,11 +20,17 @@ connectToDb((err) => {
 // routes
 
 app.get("/books", (req, res) => {
+    //current page
+const page = req.query.p || 0;
+const booksPerPage = 2;
+
   let books = [];
 
   db.collection("books")
     .find()
     .sort({ author: 1 })
+    .skip(page * booksPerPage)
+    .limit(booksPerPage)
     .forEach((book) => books.push(book))
     .then(() => {
       res.status(200).json(books);
@@ -96,3 +102,5 @@ app.patch('/books/:id', (req, res) => {
         res.status(500).json({error: "Not a valid doc id"})
     }  
 })
+
+// password: xgK8OweGM3jdOLRm
